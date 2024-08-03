@@ -1,5 +1,5 @@
 FROM alpine:3.20
-RUN apk --update add build-base patch bash texinfo gmp-dev libjpeg-turbo-dev libpng-dev elfutils-dev curl wget python3 git ruby-rake cmake sdl12-compat-dev sdl12-compat
+RUN apk --update add build-base patch bash texinfo gmp-dev libjpeg-turbo-dev libpng-dev elfutils-dev curl wget python3 git ruby-rake cmake sdl12-compat-dev sdl12-compat fmt
 
 RUN echo Creating a space for your toolchain installation...
 RUN mkdir -p /opt/toolchains/dc
@@ -18,6 +18,7 @@ RUN make clean
 
 RUN echo "Setting up the environment settings and building KOS..."
 WORKDIR /opt/toolchains/dc/kos
+RUN apk --update add coreutils
 RUN cp doc/environ.sh.sample environ.sh 
 RUN source /opt/toolchains/dc/kos/environ.sh && make
 
