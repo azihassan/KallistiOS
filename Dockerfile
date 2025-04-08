@@ -7,20 +7,20 @@ RUN chmod -R 755 /opt/toolchains/dc
 RUN chown -R $(id -u):$(id -g) /opt/toolchains/dc
 
 RUN echo Cloning the KOS git repository...
-RUN git clone -b v2.1.1 https://github.com/KallistiOS/KallistiOS /opt/toolchains/dc/kos
+RUN git clone https://github.com/KallistiOS/KallistiOS /opt/toolchains/dc/kos
 
 RUN echo Configuring the dc-chain script...
 WORKDIR /opt/toolchains/dc/kos/utils/dc-chain
 
 RUN echo "Downloading and compiling the toolchain..."
-RUN make build-sh4
+RUN make -j4 build-sh4
 RUN make clean
 
 RUN echo "Setting up the environment settings and building KOS..."
 WORKDIR /opt/toolchains/dc/kos
 RUN apk --update add coreutils
 RUN cp doc/environ.sh.sample environ.sh 
-RUN source /opt/toolchains/dc/kos/environ.sh && make
+RUN source /opt/toolchains/dc/kos/environ.sh && make -j4
 
 RUN echo "Compiling kos-ports..."
 WORKDIR /opt/toolchains/dc/
